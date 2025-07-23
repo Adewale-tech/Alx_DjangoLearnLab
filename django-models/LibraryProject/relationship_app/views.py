@@ -7,8 +7,29 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth import login
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.shortcuts import render
+from .models import UserProfiles
 
-# Function-based view
+def check_role(role):
+    def role_check(user):
+        return hasattr(user, 'userprofile') and user.userprofile.role == role
+    return role_check
+
+@user_passes_test(check_role('Admin'))
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+
+@user_passes_test(check_role('Librarian'))
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+@user_passes_test(check_role('Member'))
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
+
+        
+        # Function-based view
 def list_books(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
