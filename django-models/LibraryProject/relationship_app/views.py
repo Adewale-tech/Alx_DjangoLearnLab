@@ -35,7 +35,26 @@ class RegisterView(FormView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return super().form_valid(form)
+        return super().form_valid(form)        from django.shortcuts import render
+        from django.views.generic.detail import DetailView
+        from .models import Library, Book
+        
+        # Function-based view
+        def list_books(request):
+            books = Book.objects.all()
+            return render(request, 'relationship_app/list_books.html', {'books': books})
+        
+        # Class-based view
+        class LibraryDetailView(DetailView):
+            model = Library
+            template_name = 'relationship_app/library_detail.html'
+            context_object_name = 'library'
+        
+            def get_context_data(self, **kwargs):
+                context = super().get_context_data(**kwargs)
+                # Include all books in this specific library
+                context['books'] = self.object.books.all()
+                return context
     
     def register(request):
     if request.method == 'POST':
