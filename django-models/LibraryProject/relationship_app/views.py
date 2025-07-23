@@ -17,10 +17,6 @@ def check_role(role):
         return hasattr(user, 'userprofile') and user.userprofile.role == role
     return role_check
 
-@user_passes_test(check_role('Admin'))
-def admin_view(request):
-    return render(request, 'relationship_app/admin_view.html')
-
 # Role checkers
 def is_admin(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
