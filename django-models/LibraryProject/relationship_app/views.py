@@ -12,11 +12,6 @@ from django.shortcuts import render
 from .models import UserProfiles
 from django.contrib.auth.models import User
 
-def check_role(role):
-    def role_check(user):
-        return hasattr(user, 'userprofile') and user.userprofile.role == role
-    return role_check
-
 # Role checkers
 def is_admin(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
