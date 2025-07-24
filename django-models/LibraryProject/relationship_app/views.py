@@ -33,8 +33,8 @@ def librarian_view(request):
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
 
-# --- Book CRUD views secured with permissions ---
-@permission_required('relationship_app.add_book', raise_exception=True)
+# --- Book CRUD views secured with custom permissions ---
+@permission_required('relationship_app.can_add_book', raise_exception=True)
 def add_book(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
@@ -45,9 +45,9 @@ def add_book(request):
         form = BookForm()
     return render(request, 'relationship_app/add_book.html', {'form': form})
 
-@permission_required('relationship_app.change_book', raise_exception=True)
-def edit_book(request, pk):
-    book = get_object_or_404(Book, pk=pk)
+@permission_required('relationship_app.can_change_book', raise_exception=True)
+def edit_book(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
     if request.method == 'POST':
         form = BookForm(request.POST, instance=book)
         if form.is_valid():
@@ -57,9 +57,9 @@ def edit_book(request, pk):
         form = BookForm(instance=book)
     return render(request, 'relationship_app/edit_book.html', {'form': form, 'book': book})
 
-@permission_required('relationship_app.delete_book', raise_exception=True)
-def delete_book(request, pk):
-    book = get_object_or_404(Book, pk=pk)
+@permission_required('relationship_app.can_delete_book', raise_exception=True)
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
     if request.method == 'POST':
         book.delete()
         return redirect('list_books')
