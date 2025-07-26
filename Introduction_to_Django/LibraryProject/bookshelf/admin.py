@@ -26,4 +26,8 @@ class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'publication_year')  # Show in admin table
     search_fields = ('title', 'author')                     # Enable search
     list_filter = ('publication_year',)                     # Filter by year
+<<<<<<< HEAD
     
+=======
+    
+>>>>>>> 2f1776a (commit)

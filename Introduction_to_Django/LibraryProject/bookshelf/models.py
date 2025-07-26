@@ -41,4 +41,8 @@ class Book(models.Model):
     publication_year = models.IntegerField()
 
     def __str__(self):
+<<<<<<< HEAD
         return f"{self.title} by {self.author} ({self.publication_year})"
+=======
+        return f"{self.title} by {self.author} ({self.publication_year})"
+>>>>>>> 2f1776a (commit)
