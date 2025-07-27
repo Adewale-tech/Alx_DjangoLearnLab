@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponse
+from .models import Book
+from django.db.models import Q
 
 @permission_required('bookshelf.can_view', raise_exception=True)
 def view_document(request):
@@ -17,8 +19,11 @@ def edit_document(request):
 @permission_required('bookshelf.can_delete', raise_exception=True)
 def delete_document(request):
     return HttpResponse("Deleting document")
+
 @permission_required('bookshelf.can_view', raise_exception=True)
 def book_list(request):
-    return HttpResponse("List of books")
-
-# Create your views here.
+    query = request.GET.get('q', '')
+    books = Book.objects.filter(
+        Q(title__icontains=query) | Q(author__icontains=query)
+    ) if query else Book.objects.all()
+    return render(request, 'bookshelf/book_list.html', {'books': books})
