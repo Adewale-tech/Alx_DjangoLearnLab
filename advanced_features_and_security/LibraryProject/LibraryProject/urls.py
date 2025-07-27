@@ -22,3 +22,10 @@ urlpatterns = [
     path('', include('relationship_app.urls')),
 ]
 
+
+from django.urls import path
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+]
+(Add custom user model project under advanced_features_and_security)

@@ -20,9 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^zim$w@6s++37ogt!@5bs9v%6t^2v)&n^d#8$o2a=%f49th%&u'
 SECRET_KEY = 'django-insecure-ki0^k%t&#x4$_9*t=8f0$p)(wf349ss$1+!_dtdyt94cew96)l'
- (Add custom user model project under advanced_features_and_security)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -34,12 +32,10 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [ 'django.contrib.admin', 'django.contrib.auth', 
     'django.contrib.contenttypes', 'django.contrib.sessions', 
-<<<<<<< HEAD
-    'django.contrib.messages', 'django.contrib.staticfiles', 'relationship_app',
-=======
     'django.contrib.messages', 'django.contrib.staticfiles', 'bookshelf',
->>>>>>> 6c974d5 (Add custom user model project under advanced_features_and_security)
 ]
+
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,3 +118,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
