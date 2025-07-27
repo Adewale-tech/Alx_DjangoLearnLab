@@ -51,3 +51,11 @@ def book_list(request):
         Q(title__icontains=query) | Q(author__icontains=query)
     ) if query else Book.objects.all()
     return render(request, 'bookshelf/book_list.html', {'books': books})
+
+from django.shortcuts import render
+
+def custom_404_view(request, exception):
+    return render(request, "404.html", status=404)
+
+def custom_500_view(request):
+    return render(request, "500.html", status=500)

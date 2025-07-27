@@ -37,3 +37,6 @@ urlpatterns = [
     path('book-list/', views.book_list, name='book_list'),
 ]
 
+
+handler404 = 'bookshelf.views.custom_404_view'
+handler500 = 'bookshelf.views.custom_500_view'
