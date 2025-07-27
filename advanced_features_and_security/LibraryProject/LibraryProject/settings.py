@@ -47,6 +47,9 @@ LOGGING = {
 
 # Redirect all HTTP traffic to HTTPS
 SECURE_SSL_REDIRECT = True
+# Secure proxy header setting (useful when behind a proxy like Heroku or Nginx)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 # Use HTTP Strict Transport Security (HSTS)
 SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
