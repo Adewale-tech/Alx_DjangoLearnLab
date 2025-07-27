@@ -28,4 +28,12 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
-(Add custom user model project under advanced_features_and_security)
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('form-example/', views.form_example_view, name='form_example'),
+    path('book-list/', views.book_list, name='book_list'),
+]
+

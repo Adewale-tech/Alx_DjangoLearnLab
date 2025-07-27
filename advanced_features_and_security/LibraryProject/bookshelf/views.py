@@ -27,3 +27,27 @@ def book_list(request):
         Q(title__icontains=query) | Q(author__icontains=query)
     ) if query else Book.objects.all()
     return render(request, 'bookshelf/book_list.html', {'books': books})
+
+from django.shortcuts import render
+from .forms import ExampleForm
+from .models import Book
+from django.db.models import Q
+
+def form_example_view(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            # do something with the data
+            return render(request, 'bookshelf/form_success.html', {'name': name})
+    else:
+        form = ExampleForm()
+    return render(request, 'bookshelf/form_example.html', {'form': form})
+
+def book_list(request):
+    query = request.GET.get('q', '')
+    books = Book.objects.filter(
+        Q(title__icontains=query) | Q(author__icontains=query)
+    ) if query else Book.objects.all()
+    return render(request, 'bookshelf/book_list.html', {'books': books})
