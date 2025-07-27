@@ -17,5 +17,8 @@ def edit_document(request):
 @permission_required('bookshelf.can_delete', raise_exception=True)
 def delete_document(request):
     return HttpResponse("Deleting document")
+@permission_required('bookshelf.can_view', raise_exception=True)
+def book_list(request):
+    return HttpResponse("List of books")
 
 # Create your views here.
