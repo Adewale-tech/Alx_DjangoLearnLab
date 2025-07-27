@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth import get_user_model
 
 # Custom User Manager
 class CustomUserManager(BaseUserManager):
@@ -37,10 +38,21 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
+# UserProfile Model
+User = get_user_model()
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True, null=True)
+    joined_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s profile"
+
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
     publication_year = models.IntegerField()
 
     def __str__(self):
-        return f"{self.title} by {self.author} ({self.publication_year})"
+        return f"{self.title} by {self.author} ({self.publication_year})" 
