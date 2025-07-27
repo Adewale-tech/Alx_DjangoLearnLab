@@ -26,7 +26,9 @@ class CustomUserManager(BaseUserManager):
 # Custom User Model
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
-    username = models.CharField(max_length=150, blank=True, null=True)
+    username = models.CharField(max_length=150, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -41,8 +43,4 @@ class Book(models.Model):
     publication_year = models.IntegerField()
 
     def __str__(self):
-<<<<<<< HEAD
         return f"{self.title} by {self.author} ({self.publication_year})"
-=======
-        return f"{self.title} by {self.author} ({self.publication_year})"
->>>>>>> 2f1776a (commit)
