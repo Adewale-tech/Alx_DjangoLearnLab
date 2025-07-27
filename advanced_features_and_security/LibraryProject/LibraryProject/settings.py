@@ -6,6 +6,15 @@
 
 # ...existing code...
 
+import os
+from pathlib import Path
+
+# ...existing code...
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# ...existing code...
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
