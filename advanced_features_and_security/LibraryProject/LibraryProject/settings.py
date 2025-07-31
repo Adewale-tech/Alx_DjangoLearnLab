@@ -45,6 +45,9 @@ LOGGING = {
 # Security settings
 # =========================
 
+# 1. Disable Debug in production
+DEBUG = False
+
 # Redirect all HTTP traffic to HTTPS
 SECURE_SSL_REDIRECT = True
 # Secure proxy header setting (useful when behind a proxy like Heroku or Nginx)
