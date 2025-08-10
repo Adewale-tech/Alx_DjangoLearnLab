@@ -1,21 +1,30 @@
+# type: ignore[reportMissingTypeStubs]
 from django.shortcuts import render
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework import generics, filters
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Book
 from .serializers import BookSerializer
 
 class BookListView(generics.ListAPIView):
     """
-    View to list all books, with optional filtering by author ID.
+    View to list all books, with filtering, searching, and ordering.
+    - Filtering: by title, author (ID), publication_year.
+    - Searching: on title and author's name (?search=query).
+    - Ordering: by title, publication_year (?ordering=field or -field).
     Allows read-only access for unauthenticated users.
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['title', 'author', 'publication_year']
+    search_fields = ['title', 'author__name']
+    ordering_fields = ['title', 'publication_year']
 
     def get_queryset(self):
         """
-        Optionally filter books by author ID from query parameter.
+        Optionally filter books by author ID from query parameter (existing custom filter).
         Example: /api/books/?author=1
         """
         queryset = super().get_queryset()
@@ -58,5 +67,4 @@ class BookDeleteView(generics.DestroyAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-# Create your views here.
+    permission_classes =
