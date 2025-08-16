@@ -39,7 +39,7 @@ class PostForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Enter post title'}),
             'content': forms.Textarea(attrs={'placeholder': 'Enter post content'}),
-            'tags': TagWidget(attrs={'placeholder': 'Enter tag, separated by commas'}),
+            'tags': TagWidget()(attrs={'placeholder': 'Enter tag, separated by commas'}),
         }
 class CommentForm(forms.ModelForm):
     """
