@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile, Post
+from .models import Profile, Post, Comment
 
 class CustomUserCreationForm(UserCreationForm):
     """
@@ -40,7 +40,9 @@ class PostForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'placeholder': 'Enter post content'}),
         }
 class CommentForm(forms.ModelForm):
-    """ Form for creating and updating comments."""
+    """
+    Form for creating and updating comments.
+    """
     class Meta:
         model = Comment
         fields = ['content']
