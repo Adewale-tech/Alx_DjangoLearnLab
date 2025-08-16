@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Post
 
 class CustomUserCreationForm(UserCreationForm):
     """
@@ -27,4 +27,15 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['bio']
-        # Add 'profile_picture' if using image field
+
+class PostForm(forms.ModelForm):
+    """
+    Form for creating and updating Post model instances.
+    """
+    class Meta:
+        model = Post
+        fields = ['title', 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': 'Enter post title'}),
+            'content': forms.Textarea(attrs={'placeholder': 'Enter post content'}),
+        }
