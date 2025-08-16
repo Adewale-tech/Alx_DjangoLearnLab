@@ -19,8 +19,8 @@
             <p>By {{ comment.author.username }} on {{ comment.created_at|date:"F d, Y" }}</p>
             {% if user.is_authenticated and user == comment.author %}
                 <p>
-                    <a href="{% url 'comment_edit' post_id=post.pk comment_id=comment.pk %}">Edit</a>
-                    <a href="{% url 'comment_delete' post_id=post.pk comment_id=comment.pk %}">Delete</a>
+                    <a href="{% url 'comment_edit' comment.pk %}">Edit</a>
+                    <a href="{% url 'comment_delete' comment.pk %}">Delete</a>
                 </p>
             {% endif %}
         </div>
@@ -30,7 +30,7 @@
 {% endif %}
 {% if user.is_authenticated %}
     <h3>Add a Comment</h3>
-    <form method="post" action="{% url 'comment_new' post_id=post.pk %}">
+    <form method="post" action="{% url 'comment_new' pk=post.pk %}">
         {% csrf_token %}
         {{ comment_form.as_p }}
         <button type="submit">Submit Comment</button>
