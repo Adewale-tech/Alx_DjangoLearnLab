@@ -22,3 +22,39 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-published_date']
+
+class Profile(models.Model):
+    """
+    Model to extend User with additional fields.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio = models.TextField(blank=True, help_text="User biography")
+
+    def __str__(self):
+        return f"{self.user.username}'s profile"
+
+class Comment(models.Model):
+    """
+    Model representing a comment on a blog post.
+    """
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        help_text="The post this comment belongs to"
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        help_text="The user who wrote the comment"
+    )
+    content = models.TextField(help_text="The content of the comment")
+    created_at = models.DateTimeField(auto_now_add=True, help_text="Date the comment was created")
+    updated_at = models.DateTimeField(auto_now=True, help_text="Date the comment was last updated")
+
+    def __str__(self):
+        return f"Comment by {self.author.username} on {self.post.title}"
+
+    class Meta:
+        ordering = ['created_at']

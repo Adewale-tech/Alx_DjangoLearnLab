@@ -39,3 +39,11 @@ class PostForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'placeholder': 'Enter post title'}),
             'content': forms.Textarea(attrs={'placeholder': 'Enter post content'}),
         }
+class CommentForm(forms.ModelForm):
+    """ Form for creating and updating comments."""
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'placeholder': 'Enter your comment'}),
+        }
