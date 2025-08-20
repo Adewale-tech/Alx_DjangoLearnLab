@@ -45,6 +45,8 @@ LOGGING = {
 # Security settings
 # =========================
 
+AUTH_USER_MODEL = "bookshelf.CustomUser"
+
 # 1. Disable Debug in production
 DEBUG = False
 
