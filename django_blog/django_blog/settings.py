@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-!0f-6c2j#f-om58%o(7t3^g=0298wq-4)255_$=p2q1f0gd16s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles', 'blog',
+    'django.contrib.staticfiles',
+    'blog',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +65,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+        'DIRS' : [BASE_DIR / 'templates'],
     },
 ]
 
@@ -78,7 +81,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+["USER", "PORT"]
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -115,6 +118,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+    ]
+LOGIN_REDIRECT_URL = 'profile'
+LOGOUT_REDIRECT_URL = 'index'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
