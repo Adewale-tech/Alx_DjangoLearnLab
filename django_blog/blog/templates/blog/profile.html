@@ -1,0 +1,19 @@
+{% extends 'blog/index.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<h2>Profile</h2>
+<p>Username: {{ user.username }}</p>
+<p>Email: {{ user.email }}</p>
+<p>Bio: {{ user.profile.bio|default:"No bio set" }}</p>
+<h3>Update Profile</h3>
+{% if user_form.errors or profile_form.errors %}
+    <p style="color: red;">Please correct the errors below.</p>
+{% endif %}
+<form method="post">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ profile_form.as_p }}
+    <button type="submit">Update</button>
+</form>
+<p><a href="{% url 'logout' %}">Logout</a></p>
+{% endblock %}
