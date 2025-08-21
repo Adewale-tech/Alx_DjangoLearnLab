@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+
+from django.contrib import admin
+from django.urls import path
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+]
+
+=======
 """
 URL configuration for django_blog project.
 
@@ -14,10 +24,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+>>>>>>> 23e1b6c04226f5007912c149b37799f2733dfcc2
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+<<<<<<< HEAD
+    path('api/', include('api.urls')),  # Include API app routes
+]
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
+]
+=======
     path('', include('blog.urls')),  # Include the blog app's URLs
 ]
+>>>>>>> 23e1b6c04226f5007912c149b37799f2733dfcc2
