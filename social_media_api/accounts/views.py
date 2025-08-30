@@ -50,7 +50,7 @@ class FollowView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request, user_id):
-        all_users = User.objects.all()
+        CustomUser = User.objects.all()
         try:
             user_to_follow = User.objects.get(id=user_id)
             if user_to_follow == request.user:
@@ -64,7 +64,7 @@ class UnfollowView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
-        all_users = User.objects.all()
+        CustomUser = User.objects.all()
         try:
             user_to_unfollow = User.objects.get(id=user_id)
             if user_to_unfollow == request.user:
