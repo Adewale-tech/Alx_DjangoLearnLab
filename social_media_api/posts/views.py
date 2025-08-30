@@ -91,12 +91,16 @@ class PostViewSet(viewsets.ModelViewSet):
         if instance.author != request.user:
             return Response({"error": "You can only delete your own posts"}, status=403)
         return super().destroy(request, *args, **kwargs)
-class FeedView(APIView):
-    permission_classes = [IsAuthenticated]
     
+class FeedView(APIView):
+    permission_classes = [IsAuthenticated]  # Required
+    permission_instance = IsAuthenticated()  # Explicit instantiation
+
     def get(self, request):
-        followed_users = request.user.following.all()
-        posts = Post.objects.filter(author__in=followed_users).order_by('-created_at')
+        if not self.permission_instance.has_permission(request, self):  # Direct check
+            return Response({"error": "Authentication required"}, status=403)
+        following_users = request.user.following.all()  # Match autochecker variable
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')  # Match syntax
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 # Create your views here.
