@@ -1,13 +1,16 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Post, Comment
-from .serializers import PostSerializer, CommentSerializer
+from .models import Post, Comment, Like
+from .serializers import PostSerializer, CommentSerializer, LikeSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView 
 from rest_framework.pagination import PageNumberPagination
+from notifications.models import Notification
+from django.shortcuts import get_object_or_404
+
 User = get_user_model()
 ["permissions.IsAuthenticated"]
 
@@ -56,6 +59,32 @@ class CommentViewSet(viewsets.ModelViewSet):
         if instance.author != request.user:
             return Response({"error": "You can only delete your own comments"}, status=403)
         return super().destroy(request, *args, **kwargs)
+    
+class LikeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        user = request.user
+        if Like.objects.filter(post=post, user=user).exists():
+            return Response({"error": "You have already liked this post"}, status=status.HTTP_400_BAD_REQUEST)
+        like = Like.objects.create(post=post, user=user)
+        # Create notification
+        Notification.objects.create(
+            recipient=post.author,
+            actor=user,
+            verb='liked',
+            target_content_type=ContentType.objects.get_for_model(post),
+            target_object_id=post.id
+        )
+        return Response({"message": "Post liked"}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        user = request.user
+        like = get_object_or_404(Like, post=post, user=user)
+        like.delete()
+        return Response({"message": "Post unliked"}, status=status.HTTP_200_OK)
 
 class PostPagination(PageNumberPagination):
     page_size = 10
