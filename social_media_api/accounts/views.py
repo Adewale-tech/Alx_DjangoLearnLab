@@ -11,7 +11,7 @@ from django.http import Http404
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-User = get_user_model() 
+CustomUser = get_user_model() 
  
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -47,7 +47,7 @@ class ProfileView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
-class FollowView(generics.GenericAPIView):
+class Followuser(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request, user_id):
@@ -61,7 +61,7 @@ class FollowView(generics.GenericAPIView):
         except User.DoesNotExist:
             raise Http404("User not found")
 
-class UnfollowView(generics.GenericAPIView):
+class Unfollowuser(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
