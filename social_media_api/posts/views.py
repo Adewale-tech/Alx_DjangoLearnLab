@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView 
 from rest_framework.pagination import PageNumberPagination
 User = get_user_model()
+["permissions.IsAuthenticated"]
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
