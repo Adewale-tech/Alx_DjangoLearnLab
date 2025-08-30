@@ -8,9 +8,10 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 from django.http import Http404
+from rest_framework import generics
 
-User = get_user_model()
-
+User = get_user_model() 
+ 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
@@ -50,6 +51,7 @@ class FollowView(APIView):
 
 
     def post(self, request, user_id):
+        all_users = User.objects.all()
         try:
             user_to_follow = User.objects.get(id=user_id)
             if user_to_follow == request.user:
@@ -63,6 +65,7 @@ class UnfollowView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
+        all_users = User.objects.all()
         try:
             user_to_unfollow = User.objects.get(id=user_id)
             if user_to_unfollow == request.user:
