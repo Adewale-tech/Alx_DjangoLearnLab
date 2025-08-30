@@ -12,6 +12,13 @@ class CustomUser(AbstractUser):
         blank=True,
         help_text="Users following this user"
     )
+    following = models.ManyToManyField(
+        'self',
+        symmetrical=False,
+        related_name='followers',
+        blank=True,
+        help_text="Users this user follows"
+    )
 
     def __str__(self):
         return self.username

@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from django.contrib.auth import get_user_model
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.views import APIView 
 User = get_user_model()
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -90,4 +90,12 @@ class PostViewSet(viewsets.ModelViewSet):
         if instance.author != request.user:
             return Response({"error": "You can only delete your own posts"}, status=403)
         return super().destroy(request, *args, **kwargs)
+class FeedView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        followed_users = request.user.following.all()
+        posts = Post.objects.filter(author__in=followed_users).order_by('-created_at')
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
 # Create your views here.
