@@ -15,6 +15,7 @@ from typing import Optional
 
 User = get_user_model()
 ["permissions.IsAuthenticated"]
+["generics.get_object_or_404(Post, pk=pk)"]
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
