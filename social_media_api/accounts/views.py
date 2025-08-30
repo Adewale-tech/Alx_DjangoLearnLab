@@ -9,7 +9,6 @@ from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 from django.http import Http404
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
 
 CustomUser = get_user_model() 
  
