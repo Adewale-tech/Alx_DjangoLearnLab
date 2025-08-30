@@ -48,8 +48,7 @@ class ProfileView(APIView):
 
 class FollowView(generics.GenericsAPIView):
     permission_classes = [IsAuthenticated]
-
-
+    
     def post(self, request, user_id):
         all_users = User.objects.all()
         try:
