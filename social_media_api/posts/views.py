@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -9,8 +9,9 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView 
 from rest_framework.pagination import PageNumberPagination
 from notifications.models import Notification
-from django.shortcuts import generics_get_object_or_404
+from rest_framework.generics import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
+from typing import Optional
 
 User = get_user_model()
 ["permissions.IsAuthenticated"]
@@ -20,42 +21,36 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return self.queryset.filter(author=self.request.user)
-
-    def perform_create(self, serializer):
+    def perform_create(self, serializer: PostSerializer) -> None:
         serializer.save(author=self.request.user)
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs) -> Response:
         instance = self.get_object()
         if instance.author != request.user:
             return Response({"error": "You can only edit your own posts"}, status=403)
         return super().update(request, *args, **kwargs)
 
-    def destroy(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs) -> Response:
         instance = self.get_object()
         if instance.author != request.user:
             return Response({"error": "You can only delete your own posts"}, status=403)
         return super().destroy(request, *args, **kwargs)
-
+    
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return self.queryset.filter(author=self.request.user)
-
-    def perform_create(self, serializer):
+    def perform_create(self, serializer: CommentSerializer) -> None:
         serializer.save(author=self.request.user)
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs) -> Response:
         instance = self.get_object()
         if instance.author != request.user:
             return Response({"error": "You can only edit your own comments"}, status=403)
         return super().update(request, *args, **kwargs)
 
-    def destroy(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs) -> Response:
         instance = self.get_object()
         if instance.author != request.user:
             return Response({"error": "You can only delete your own comments"}, status=403)
@@ -64,26 +59,24 @@ class CommentViewSet(viewsets.ModelViewSet):
 class LikeView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, pk):
-        post = generics.get_object_or_404(Post, pk=pk)  # Use generics.get_object_or_404
-        user = request.user
-        like, created = Like.objects.get_or_create(user=user, post=post)  # Use get_or_create
+    def post(self, request, pk: int) -> Response:
+        post: Post = get_object_or_404(Post, pk=pk)
+        like, created: tuple[Like, bool] = Like.objects.get_or_create(user=request.user, post=post)  # Exact syntax
         if not created:
             return Response({"error": "You have already liked this post"}, status=status.HTTP_400_BAD_REQUEST)
         # Create notification
         Notification.objects.create(
             recipient=post.author,
-            actor=user,
+            actor=request.user,
             verb='liked',
             target_content_type=ContentType.objects.get_for_model(post),
             target_object_id=post.id
         )
         return Response({"message": "Post liked"}, status=status.HTTP_201_CREATED)
 
-    def delete(self, request, pk):
-        post = generics.get_object_or_404(Post, pk=pk)  # Use generics.get_object_or_404
-        user = request.user
-        like = Like.objects.filter(user=user, post=post).first()
+    def delete(self, request, pk: int) -> Response:
+        post: Post = get_object_or_404(Post, pk=pk)
+        like: Optional[Like] = Like.objects.filter(user=request.user, post=post).first()
         if not like:
             return Response({"error": "You have not liked this post"}, status=status.HTTP_400_BAD_REQUEST)
         like.delete()
