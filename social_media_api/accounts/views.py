@@ -53,7 +53,7 @@ class followuser(generics.GenericAPIView):
     def post(self, request, user_id):
         all_users = CustomUser.objects.all()
         try:
-            user_to_follow = CustomUser.objects.get(id=user_id)
+            user_to_follow = all_users.get(id=user_id)
             if user_to_follow == request.user:
                 return Response({"error": "Cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
             request.user.following.add(user_to_follow)
@@ -67,7 +67,7 @@ class unfollowuser(generics.GenericAPIView):
     def post(self, request, user_id):
         all_users = CustomUser.objects.all()
         try:
-            user_to_unfollow = CustomUser.objects.get(id=user_id)
+            user_to_unfollow = all_users.objects.get(id=user_id)
             if user_to_unfollow == request.user:
                 return Response({"error": "Cannot unfollow yourself"}, status=status.HTTP_400_BAD_REQUEST)
             request.user.following.remove(user_to_unfollow)
