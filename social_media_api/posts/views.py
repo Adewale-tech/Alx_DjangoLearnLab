@@ -9,7 +9,8 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView 
 from rest_framework.pagination import PageNumberPagination
 from notifications.models import Notification
-from django.shortcuts import get_object_or_404
+from django.shortcuts import generics_get_object_or_404
+from django.contrib.contenttypes.models import ContentType
 
 User = get_user_model()
 ["permissions.IsAuthenticated"]
@@ -64,11 +65,11 @@ class LikeView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)  # Use generics.get_object_or_404
         user = request.user
-        if Like.objects.filter(post=post, user=user).exists():
+        like, created = Like.objects.get_or_create(user=user, post=post)  # Use get_or_create
+        if not created:
             return Response({"error": "You have already liked this post"}, status=status.HTTP_400_BAD_REQUEST)
-        like = Like.objects.create(post=post, user=user)
         # Create notification
         Notification.objects.create(
             recipient=post.author,
@@ -80,9 +81,11 @@ class LikeView(APIView):
         return Response({"message": "Post liked"}, status=status.HTTP_201_CREATED)
 
     def delete(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)  # Use generics.get_object_or_404
         user = request.user
-        like = get_object_or_404(Like, post=post, user=user)
+        like = Like.objects.filter(user=user, post=post).first()
+        if not like:
+            return Response({"error": "You have not liked this post"}, status=status.HTTP_400_BAD_REQUEST)
         like.delete()
         return Response({"message": "Post unliked"}, status=status.HTTP_200_OK)
 
