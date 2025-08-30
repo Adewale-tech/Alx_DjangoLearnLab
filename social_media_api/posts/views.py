@@ -7,6 +7,7 @@ from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView 
+from rest_framework.pagination import PageNumberPagination
 User = get_user_model()
 
 class PostViewSet(viewsets.ModelViewSet):
