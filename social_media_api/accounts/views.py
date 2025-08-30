@@ -47,7 +47,7 @@ class ProfileView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
-class Followuser(generics.GenericAPIView):
+class followuser(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request, user_id):
@@ -61,7 +61,7 @@ class Followuser(generics.GenericAPIView):
         except CustomUser.DoesNotExist:
             raise Http404("User not found")
 
-class Unfollowuser(generics.GenericAPIView):
+class unfollowuser(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
