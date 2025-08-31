@@ -7,6 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'your-local-secret-key')
 DEBUG = False
 ALLOWED_HOSTS = ['*']  # Update with your domain in production
+["PORT", "USER"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
